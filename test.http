@@ -1,0 +1,581 @@
+################## SECTION C ################## 
+### SECTION C : Discounts, Base of 20% and addt'l 3% for 4 rides/fares.
+
+### 17:47 - Get DiscountedCard with id of 102;
+### Monitor the record value, specifically on amountLoad.
+GET https://localhost:7287/card/discountedcard/102
+
+### 17:27 - Testing Discounted Payments, 20% and 3%.
+### Try Sending this request 5x or more to see the discount on the amountLoad
+PUT https://localhost:7287/card/discountedcard/102
+Content-Type: application/json
+
+# ACTUAL OUTPUT:
+#
+# HTTP/1.1 204 No Content
+# Connection: close
+# Date: Sat, 19 Mar 2022 09:28:15 GMT
+# Server: Kestrel
+
+
+
+
+
+### 16:22 - Create DiscountedCards with valid seniorCitizenId and valid pwdId.
+POST https://localhost:7287/card/discountedcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "SC-3333-3333",
+  "pwdId": "PHPW-1234-5678"
+}
+
+# ACTUAL OUTPUT:
+#
+# HTTP/1.1 201 Created
+# Connection: close
+# Content-Type: application/json; charset=utf-8
+# Date: Sat, 19 Mar 2022 08:23:13 GMT
+# Server: Kestrel
+# Location: https://localhost:7287/Card/DiscountedCard?id=102
+# Transfer-Encoding: chunked
+#
+# {
+#   "tripsInADay": 0,
+#   "tripDayDate": "2022-03-19T16:23:13.6098933+08:00",
+#   "id": 102,
+#   "cardType": 1,
+#   "amountLoad": 500,
+#   "validUntil": null
+# }
+
+
+
+### 16:18 - Create DiscountedCards with no seniorCitizenId or pwdId.
+POST https://localhost:7287/card/discountedcard
+Content-Type: application/json
+
+{}
+
+# ACTUAL OUTPUT:
+#
+# HTTP/1.1 400 Bad Request
+# Connection: close
+# Content-Type: text/plain; charset=utf-8
+# Date: Sat, 19 Mar 2022 08:20:37 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+#
+# Please supply seniorCitizenId or pwdId.
+
+
+
+
+
+### 16:02 - Get all DiscountedCards;
+GET https://localhost:7287/card/discountedcard
+
+
+# ACTUAL OUTPUT:
+#
+# HTTP/1.1 200 OK
+# Connection: close
+# Content-Type: application/json; charset=utf-8
+# Date: Sat, 19 Mar 2022 08:04:24 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+#
+# [
+#   {
+#     "tripsInADay": 0,
+#     "tripDayDate": "2022-03-19T00:00:00+08:00",
+#     "id": 101,
+#     "cardType": 1,
+#     "amountLoad": 500,
+#     "validUntil": null
+#   }
+# ]
+
+
+
+
+
+
+
+
+################## SECTION A and B ################## 
+
+### 11:57 Testing Get All cards, by default there are 2 sample data;  ###
+GET https://localhost:7287/card
+
+# ACTUAL OUTPUT: 
+# GET https://localhost:7287/card
+#
+# HTTP/1.1 200 OK
+# Connection: close
+# Content-Type: application/json; charset=utf-8
+# Date: Sat, 19 Mar 2022 03:57:45 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+#
+# [
+#   {
+#     "id": 1,
+#     "cardType": 0,
+#     "amountLoad": 100,
+#     "validUntil": null
+#   },
+#   {
+#     "id": 2,
+#     "cardType": 1,
+#     "amountLoad": 500,
+#     "validUntil": null
+#   }
+# ]
+
+
+
+
+
+### 12:00 Section A: Q-LESS Transport Card  ###
+### Create Q-LESS Transport Card: 
+### - initial load of P100 (amountLoad) - OK!
+### - cardType should be 0 - OK!  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{}
+
+### ACTUAL OUTPUT: ###
+# POST https://localhost:7287/card/newcard
+#
+# HTTP/1.1 201 Created
+# Connection: close
+# Content-Type: application/json; charset=utf-8
+# Date: Sat, 19 Mar 2022 04:03:48 GMT
+# Server: Kestrel
+# Location: https://localhost:7287/Card/NewCard?id=3
+# Transfer-Encoding: chunked
+#
+# {
+#   "id": 3,
+#   "cardType": 0,
+#   "amountLoad": 100,
+#   "validUntil": null
+# }
+
+
+
+
+
+### 12:05 Section A: Q-LESS Transport Card - See details of record with id 3:  ###
+GET https://localhost:7287/card/3
+
+
+### ACTUAL OUTPUT: ###
+# GET https://localhost:7287/card/3
+#
+# HTTP/1.1 200 OK
+# Connection: close
+# Content-Type: application/json; charset=utf-8
+# Date: Sat, 19 Mar 2022 04:11:07 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+#
+# {
+#   "id": 3,
+#   "cardType": 0,
+#   "amountLoad": 100,
+#   "validUntil": null
+# }
+
+
+
+
+### 12:10 Section A: Q-LESS Transport Card - Payment every exit  ###
+### - valid up to 5 years after the last used date. 
+### - a fix rate of P15 will be deducted regardless of station.
+PUT https://localhost:7287/card/farepayment/3
+
+### ACTUAL OUTPUT: ###
+# PUT https://localhost:7287/card/farepayment/3
+#
+# HTTP/1.1 204 No Content
+# Connection: close
+# Date: Sat, 19 Mar 2022 04:15:00 GMT
+# Server: Kestrel
+
+
+
+
+### 12:15 Section A: Q-LESS Transport Card - See details of record with id 3:  ###
+### After FarePayment action below:
+### - valid up to 5 years after the last used date. - OK! 
+### - a fix rate of P15 will be deducted regardless of station. - OK!
+
+GET https://localhost:7287/card/3
+
+### ACTUAL OUTPUT: ###
+# GET https://localhost:7287/card/3
+#
+# HTTP/1.1 200 OK
+# Connection: close
+# Content-Type: application/json; charset=utf-8
+# Date: Sat, 19 Mar 2022 04:17:12 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+#
+# {
+#   "id": 3,
+#   "cardType": 0,
+#   "amountLoad": 85,
+#   "validUntil": "2027-03-19T12:15:01.1996761+08:00"
+# }
+
+
+
+
+
+
+
+### 12:21 Section B: Q-LESS Discounted Transport Card  ###
+### Creation, with Senior Citizen ID and PWD ID Validation
+###  - Senior Citizen Control Number is a 10-character length string with “##-####-####” format.
+###  - PWD ID Number is a 12-character length string with “####-####-####” format.
+
+### Invalid PWD ID 
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+    "pwdId": "PHPW12345678"
+}
+
+### ACTUAL OUTPUT: ###
+#
+# HTTP/1.1 400 Bad Request
+# Connection: close
+# Content-Type: text/plain; charset=utf-8
+# Date: Sat, 19 Mar 2022 04:28:23 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+#
+#
+# Invalid PWD ID Number is a 12-character length string with “####-####-####” format.
+
+
+
+### Invalid Senior Citizen ID  ###
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "PH12-34-1234"
+}
+
+### ACTUAL OUTPUT: ###
+#
+# HTTP/1.1 400 Bad Request
+# Connection: close
+# Content-Type: text/plain; charset=utf-8
+# Date: Sat, 19 Mar 2022 04:26:01 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+#
+#
+# Invalid Senior Citizen Control Number, it should be a 10-character length string with “##-####-####“ format.
+
+
+
+
+
+
+### Invalid Senior Citizen ID and invalid PWD ID  ###
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "PH1234-1234",
+  "pwdId": "PHPW1234-5678"
+}
+
+### ACTUAL OUTPUT: ###
+#
+# HTTP/1.1 400 Bad Request
+# Connection: close
+# Content-Type: text/plain; charset=utf-8
+# Date: Sat, 19 Mar 2022 04:24:40 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+#
+#
+# Invalid Senior Citizen Control Number, it should be a 10-character length string with “##-####-####“ format.
+# Invalid PWD ID Number is a 12-character length string with “####-####-####” format.
+
+
+
+
+### 12:21 Section B: Q-LESS Discounted Transport Card ###
+### Creation with valid Senior Citizen ID and valid PWD ID
+### - initial load of P500. - OK!
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "PH-1234-1234",
+  "pwdId": "PHPW-1234-5678"
+}
+
+### ACTUAL OUTPUT: ###
+#
+# HTTP/1.1 201 Created
+# Connection: close
+# Content-Type: application/json; charset=utf-8
+# Date: Sat, 19 Mar 2022 04:32:47 GMT
+# Server: Kestrel
+# Location: https://localhost:7287/Card/NewCard?id=4
+# Transfer-Encoding: chunked
+
+# {
+#   "id": 4,
+#   "cardType": 1,
+#   "amountLoad": 500,
+#   "validUntil": null
+# }
+
+
+
+
+
+
+### 12:35 Section B: Q-LESS Discounted Transport Card ###
+### Fare Payment using Discounted under Section B.
+### - initial load of P500. - OK!
+### - valid up to 3 years after the last used date.
+### - a fix rate of P10 will be deducted regardless of station.
+PUT https://localhost:7287/card/farepayment/4
+
+### ACTUAL OUTPUT: ###
+#
+# HTTP/1.1 204 No Content
+# Connection: close
+# Date: Sat, 19 Mar 2022 04:37:42 GMT
+# Server: Kestrel
+
+
+
+
+
+
+### 12:38 Section B: Q-LESS Discounted Transport Card ###
+### Verifiying records value base on rules
+### - valid up to 3 years after the last used date. - OK!
+### - a fix rate of P10 will be deducted regardless of station. - OK!
+
+GET https://localhost:7287/card/4
+
+### ACTUAL OUTPUT: ###
+#
+# HTTP/1.1 200 OK
+# Connection: close
+# Content-Type: application/json; charset=utf-8
+# Date: Sat, 19 Mar 2022 04:39:34 GMT
+# Server: Kestrel
+# Transfer-Encoding: chunked
+
+# {
+#   "id": 4,
+#   "cardType": 1,
+#   "amountLoad": 490,
+#   "validUntil": "2025-03-19T12:37:42.9161411+08:00"
+# }
+
+
+
+
+
+
+
+
+
+
+##############################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 11:19 Testing Get by Id, record with id of 5, Discounted, P10 Fare
+PUT https://localhost:7287/card/farepayment/5
+
+
+
+### 11:19 Testing Get by Id, record with id of 5, Discounted, P10 Fare
+GET https://localhost:7287/card/5
+
+
+### 11:22 Create NewCard with valid seniorCitizenId and/or valid PWDId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "PH-1234-1234",
+  "pwdId": "PHPW-1234-5678"
+}
+
+
+### 11:19 Testing Get by Id, record with id of 3 - No Discount, 15 per exit
+GET https://localhost:7287/card/3
+
+### 11:17 Testing Section A, Payment of 15 => "cardType": 0,  
+PUT https://localhost:7287/card/farepayment/3
+Content-Type: application/json
+
+
+### 11:15 Testing NewCard with no discount => "cardType": 0 || Section A,  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{}
+
+
+### 11:14 Testing Get by Id, record with id of 2
+GET https://localhost:7287/card/2
+
+
+### 11:13 Testing GetAll
+GET https://localhost:7287/card
+
+
+
+#######################################################################
+
+### 08:35 Testing NewCard with no discount;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{}
+
+### 08:28 Testing NewCard with valid seniorCitizenId and valid PWDId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "PH-1234-1234",
+  "pwdId": "PHPW-1234-5678"
+}
+
+
+### 08:27 Testing NewCard with valid seniorCitizenId and invalid PWDId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "PH-1234-1234",
+  "pwdId": "PH-1234-5678"
+}
+
+### 08:14 Testing NewCard with invalid seniorCitizenId and valid PWDId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "1234-1234",
+  "pwdId": "PHPW-1234-5678"
+}
+
+
+### 08:14 Testing NewCard with invalid seniorCitizenId and PWDId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "pwdId": "P-1234-5678",
+  "seniorCitizenId": "test"
+}
+
+
+### 08:13 Testing NewCard with discount on valid PWDId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "pwdId": "PH00-1234-5678"
+}
+
+
+### 08:13 Testing NewCard with discount on invalid PWDId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "pwdId": "PH-1234-5678"
+}
+
+### 08:12 Testing NewCard with discount on valid seniorCitizenId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "PH-1234-5678"
+}
+
+
+### 07:59 Testing NewCard with discount on invalid seniorCitizenId format;  
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "test"
+}
+
+
+### 07:35 Testing NewCard with discount
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{
+  "seniorCitizenId": "test"
+}
+
+### 07:27 Testing NewCard
+POST https://localhost:7287/card/newcard
+Content-Type: application/json
+
+{}
+
+
+### 06:32 Get newly added card
+GET https://localhost:7287/card/3
+
+### 06:30 Testing Add Card
+POST https://localhost:7287/card
+Content-Type: application/json
+
+{
+  "cardType": 1,
+  "amountLoad": 500,
+  "validUntil": null
+}
+
+
+### 06:14 Testing Get by Id
+GET https://localhost:7287/card/2
+
+
+### 06:12 Testing GetAll
+GET https://localhost:7287/card
+
+### Testing the default api if working.
+GET https://localhost:7287/weatherforecast

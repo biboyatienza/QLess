@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "MAfxpnlt+EhFY/kBsiL2Ds2UH71OtU/7T3PZHU8/djSXksXA5TF1rDeHD7Iiw5+EARHpd3Gvd4GQjASWQs8Dyg==",
+  "success": true,
+  "projectFilePath": "/home/bboy/Documents/Codes/2022/100knet/qless/qless.csproj",
+  "expectedPackageFiles": [
+    "/home/bboy/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "/home/bboy/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/home/bboy/.nuget/packages/swashbuckle.aspnetcore/6.2.3/swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "/home/bboy/.nuget/packages/swashbuckle.aspnetcore.swagger/6.2.3/swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "/home/bboy/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.2.3/swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "/home/bboy/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.2.3/swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
+  "logs": []
+}
